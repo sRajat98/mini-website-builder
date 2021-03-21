@@ -42,3 +42,10 @@ export const updateElementProperties = (id, properties) => ({
     properties: properties,
   },
 });
+
+export const deleteElement = (id) => ({
+  type: types.DELETE_SELECTED_ELEMENT,
+  payload: {
+    elementId: id,
+  },
+});

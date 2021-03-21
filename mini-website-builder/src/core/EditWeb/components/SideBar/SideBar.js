@@ -16,7 +16,7 @@ const SideBar = (props) => {
           <IndividualElement
             key={element.type}
             title={element.title}
-            draggable
+            draggable={!props.isFormModalVisible}
             onDragStart={(e) => props.onDragStart({ e, type: element.type })}
           />
         ))}

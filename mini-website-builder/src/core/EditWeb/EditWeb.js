@@ -1,4 +1,4 @@
-import React, { createElement, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 //redux related imports
 import { useDispatch, useSelector } from "react-redux";
 //component imports
@@ -12,7 +12,31 @@ import { v4 as uuidv4 } from "uuid";
 import * as Styled from "./EditWeb.styles";
 
 const EditWeb = () => {
+  const {
+    sideBar: { isFormModalVisible, selectedElementId },
+  } = useSelector((state) => state);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKeydown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeydown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, selectedElementId]);
+
+  const onKeydown = (e) => {
+    if (e.keyCode === 46) {
+      if (selectedElementId)
+        dispatch(actionCreators.deleteElement(selectedElementId));
+    } else if (e.keyCode === 13) {
+      if (selectedElementId) {
+        dispatch(actionCreators.setFormModalVisiblity());
+      }
+    }
+  };
+
   const onDragStart = useCallback(({ e, type, id, sourceID }) => {
     e.stopPropagation();
     e.dataTransfer.setData("type", type);
@@ -40,6 +64,11 @@ const EditWeb = () => {
     dispatch(actionCreators.setFormModalVisiblity(id));
   };
 
+  const deleteElement = (event, id) => {
+    console.log(event);
+    // dispatch(actionCreators.deleteElement(id));
+  };
+
   const onDrop = useCallback(
     (containerId) => (e) => {
       e.stopPropagation();
@@ -64,7 +93,10 @@ const EditWeb = () => {
 
   return (
     <Styled.Container>
-      <SideBar onDragStart={onDragStart} />
+      <SideBar
+        onDragStart={onDragStart}
+        isFormModalVisible={isFormModalVisible}
+      />
       <DroppableContainer
         onDragStart={onDragStart}
         onDragOver={onDragOver}
@@ -72,6 +104,7 @@ const EditWeb = () => {
         onDrop={onDrop}
         onElementClick={onElementClick}
         selectElementClick={selectElementClick}
+        deleteElement={deleteElement}
       />
     </Styled.Container>
   );

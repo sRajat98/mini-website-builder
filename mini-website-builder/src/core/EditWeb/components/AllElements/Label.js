@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import * as Styled from "./AllElements.styled";
 
 const Label = (props) => {
-  // const [id, setId] = useState(null);
-  const id = props.properties ? props.properties.id : null;
+  // const id = props.properties ? props.properties.id : undefined;
+  const isSelected = props.selectedElementId
+    ? props.selectedElementId === props.id
+    : null;
 
   return (
     <Styled.Label
       properties={props.properties}
+      isSelected={isSelected}
       onClick={() =>
-        props.selectedElementId === id
-          ? props.onElementClick(props.properties ? props.properties.id : null)
-          : props.selectElementClick(
-              props.properties ? props.properties.id : null
-            )
+        props.selectedElementId === props.id
+          ? props.onElementClick(props.id)
+          : props.selectElementClick(props.id)
       }
+      onKeyDown={props.deleteElement}
     >
       {props.properties
         ? props.properties.properties.textValue

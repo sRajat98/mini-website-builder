@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as actionCreators from "../../app/redux/actions/searchBarActions";
 import * as Styled from "./FormModal.styled";
+import { getElementPropertiedById } from "../../app/redux/selectors/selectors";
 
 import closeIcon from "../../app/images/close.png";
 
 const FormModal = ({ id }) => {
   const dispatch = useDispatch();
-
+  const elementProperties = useSelector(getElementPropertiedById);
   const [state, setState] = useState({
     textValue: null,
     Xcood: null,
@@ -16,6 +17,12 @@ const FormModal = ({ id }) => {
     fontSize: null,
     fontWeight: null,
   });
+
+  useEffect(() => {
+    // eslint-disable-next-line no-unused-expressions
+    elementProperties ? setState({ ...elementProperties.properties }) : null;
+    dispatch(actionCreators.setSeledctedElementId(null));
+  }, [dispatch, elementProperties]);
 
   const onChange = (value) => {
     setState({ ...state, ...value });
@@ -25,11 +32,13 @@ const FormModal = ({ id }) => {
     e.preventDefault();
     dispatch(actionCreators.updateElementProperties(id, state));
     dispatch(actionCreators.setFormModalVisiblity());
+    dispatch(actionCreators.setSeledctedElementId(null));
   };
 
   const formCloseHandler = () => {
-    dispatch(actionCreators.updateElementProperties(id, state));
+    dispatch(actionCreators.updateElementProperties(id, null));
     dispatch(actionCreators.setFormModalVisiblity());
+    dispatch(actionCreators.setSeledctedElementId(null));
   };
 
   return (
@@ -41,6 +50,7 @@ const FormModal = ({ id }) => {
           <Styled.Input
             onChange={(e) => onChange({ textValue: e.currentTarget.value })}
             type="text"
+            value={state.textValue}
           />
         </Styled.Label>
         <Styled.Label>
@@ -48,6 +58,7 @@ const FormModal = ({ id }) => {
           <Styled.Input
             type="number"
             onChange={(e) => onChange({ Xcood: e.currentTarget.value })}
+            value={state.Xcood}
           />
         </Styled.Label>
         <Styled.Label>
@@ -55,6 +66,7 @@ const FormModal = ({ id }) => {
           <Styled.Input
             type="number"
             onChange={(e) => onChange({ Ycood: e.currentTarget.value })}
+            value={state.Ycood}
           />
         </Styled.Label>
         <Styled.Label>
@@ -62,6 +74,7 @@ const FormModal = ({ id }) => {
           <Styled.Input
             type="text"
             onChange={(e) => onChange({ fontSize: e.currentTarget.value })}
+            value={state.fontSize}
           />
         </Styled.Label>
         <Styled.Label>
@@ -69,6 +82,7 @@ const FormModal = ({ id }) => {
           <Styled.Input
             type="text"
             onChange={(e) => onChange({ fontWeight: e.currentTarget.value })}
+            value={state.fontWeight}
           />
         </Styled.Label>
         <Styled.Button onClick={onSubmitHandler}>Save</Styled.Button>

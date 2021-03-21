@@ -7,7 +7,7 @@ const initialState = {
   properties: [
     {
       id: null,
-      properties: null,
+      properties: [],
     },
   ],
   selectedElementId: null,
@@ -43,18 +43,51 @@ const searchBarReducer = (state = initialState, action) => {
       const { elementId, properties } = action.payload;
       let obj = state.properties.findIndex((el) => el.id === elementId);
       if (obj !== -1) {
-        state.properties[obj].id = elementId;
-        state.properties[obj].properties = properties;
-        return { ...state };
+        if (properties) {
+          state.properties[obj].id = elementId;
+          state.properties[obj].properties = properties;
+          return { ...state };
+        } else {
+          state.properties[obj].id = elementId;
+          return { ...state };
+        }
       } else {
-        return {
-          ...state,
-          properties: [
-            ...state.properties,
-            { id: elementId, properties: properties },
-          ],
-        };
+        if (properties) {
+          return {
+            ...state,
+            properties: [
+              ...state.properties,
+              { id: elementId, properties: properties },
+            ],
+          };
+        } else {
+          console.log("hello");
+          return {
+            ...state,
+            id: elementId,
+            properties: [
+              {
+                textValue: null,
+                Xcood: null,
+                Ycood: null,
+                fontSize: null,
+                fontWeight: null,
+              },
+            ],
+          };
+        }
       }
+    }
+    case types.DELETE_SELECTED_ELEMENT: {
+      const { elementId } = action.payload;
+      console.log(state.elements);
+      const newState = state.elements.filter(
+        (element) => element.id !== elementId
+      );
+      return {
+        ...state,
+        elements: newState,
+      };
     }
     default:
       return { ...state };

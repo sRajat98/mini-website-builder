@@ -20,6 +20,7 @@ const DroppableContainer = (props) => {
       selectedElementId,
     },
   } = useSelector((state) => state);
+
   return (
     <>
       <Styled.Container
@@ -34,10 +35,12 @@ const DroppableContainer = (props) => {
             <Element
               key={element.id}
               type={element.type}
+              id={element.id}
               properties={elementProperties}
               onElementClick={props.onElementClick}
               selectedElementId={selectedElementId}
               selectElementClick={props.selectElementClick}
+              deleteElement={props.deleteElement}
             />
           );
         })}
