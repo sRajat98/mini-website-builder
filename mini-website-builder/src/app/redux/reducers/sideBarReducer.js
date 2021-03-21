@@ -2,7 +2,6 @@ import * as types from "../actionTypes";
 
 const initialState = {
   elements: [],
-  children: [],
   draggedElementId: null,
   properties: [
     {
@@ -10,6 +9,9 @@ const initialState = {
       properties: [],
     },
   ],
+  sideBarWidth: null,
+  initialX: null,
+  initialY: null,
   selectedElementId: null,
   isFormModalVisible: false,
 };
@@ -21,7 +23,6 @@ const searchBarReducer = (state = initialState, action) => {
       return {
         ...state,
         elements: [...state.elements, element],
-        children: [...state.children, element.id],
         draggedElementId: element.id,
       };
     }
@@ -37,6 +38,7 @@ const searchBarReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedElementId: elementId,
+        draggedElementId: elementId ? elementId : state.draggedElementId,
       };
     }
     case types.UPDATE_ELEMENT_PROPERTIES: {
@@ -46,9 +48,6 @@ const searchBarReducer = (state = initialState, action) => {
         if (properties) {
           state.properties[obj].id = elementId;
           state.properties[obj].properties = properties;
-          return { ...state };
-        } else {
-          state.properties[obj].id = elementId;
           return { ...state };
         }
       } else {
@@ -60,33 +59,52 @@ const searchBarReducer = (state = initialState, action) => {
               { id: elementId, properties: properties },
             ],
           };
-        } else {
-          console.log("hello");
-          return {
-            ...state,
-            id: elementId,
-            properties: [
-              {
-                textValue: null,
-                Xcood: null,
-                Ycood: null,
-                fontSize: null,
-                fontWeight: null,
-              },
-            ],
-          };
         }
       }
+      return { ...state };
     }
     case types.DELETE_SELECTED_ELEMENT: {
       const { elementId } = action.payload;
-      console.log(state.elements);
+
       const newState = state.elements.filter(
         (element) => element.id !== elementId
       );
       return {
         ...state,
         elements: newState,
+      };
+    }
+    case types.SET_SIDEBAR_WIDTH: {
+      const { sideBarWidth } = action.payload;
+      return {
+        ...state,
+        sideBarWidth: sideBarWidth,
+      };
+    }
+    case types.SET_INITIAL_COODS: {
+      const { Xcood, Ycood } = action.payload;
+      const finalXcoods = Xcood - (state.sideBarWidth + 20);
+      return {
+        ...state,
+        initialX: finalXcoods > 0 ? finalXcoods : 0,
+        initialY: Ycood - 23,
+      };
+    }
+    case types.RESET_ALL_DATA: {
+      return {
+        elements: [],
+        draggedElementId: null,
+        properties: [
+          {
+            id: null,
+            properties: [],
+          },
+        ],
+        sideBarWidth: null,
+        initialX: null,
+        initialY: null,
+        selectedElementId: null,
+        isFormModalVisible: false,
       };
     }
     default:

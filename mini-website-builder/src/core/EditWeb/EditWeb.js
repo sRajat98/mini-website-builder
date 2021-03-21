@@ -16,7 +16,7 @@ const EditWeb = () => {
     sideBar: { isFormModalVisible, selectedElementId },
   } = useSelector((state) => state);
   const dispatch = useDispatch();
-
+  const state = useSelector((state) => state);
   useEffect(() => {
     window.addEventListener("keydown", onKeydown);
 
@@ -25,6 +25,10 @@ const EditWeb = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, selectedElementId]);
+
+  useEffect(() => {
+    window.localStorage.setItem("state", JSON.stringify(state));
+  }, [state]);
 
   const onKeydown = (e) => {
     if (e.keyCode === 46) {
@@ -65,7 +69,6 @@ const EditWeb = () => {
   };
 
   const deleteElement = (event, id) => {
-    console.log(event);
     // dispatch(actionCreators.deleteElement(id));
   };
 
@@ -91,11 +94,21 @@ const EditWeb = () => {
     []
   );
 
+  const onDragEnd = (e) => {
+    e.preventDefault();
+    const coods = {
+      Xcood: e.pageX,
+      Ycood: e.pageY,
+    };
+    dispatch(actionCreators.setInitialCoods(coods.Xcood, coods.Ycood));
+  };
+
   return (
     <Styled.Container>
       <SideBar
         onDragStart={onDragStart}
         isFormModalVisible={isFormModalVisible}
+        onDragEnd={onDragEnd}
       />
       <DroppableContainer
         onDragStart={onDragStart}

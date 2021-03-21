@@ -18,6 +18,8 @@ const DroppableContainer = (props) => {
       isFormModalVisible,
       properties,
       selectedElementId,
+      initialX,
+      initialY,
     },
   } = useSelector((state) => state);
 
@@ -45,7 +47,11 @@ const DroppableContainer = (props) => {
           );
         })}
         {isFormModalVisible ? (
-          <FormModal id={draggedElementId}></FormModal>
+          <FormModal
+            id={draggedElementId}
+            initialX={initialX}
+            initialY={initialY}
+          ></FormModal>
         ) : null}
       </Styled.Container>
     </>

@@ -49,3 +49,29 @@ export const deleteElement = (id) => ({
     elementId: id,
   },
 });
+
+export const setSiderBarWidth = (width) => ({
+  type: types.SET_SIDEBAR_WIDTH,
+  payload: {
+    sideBarWidth: width,
+  },
+});
+
+export const setInitialCoods = (Xcood, Ycood) => ({
+  type: types.SET_INITIAL_COODS,
+  payload: {
+    Xcood: Xcood,
+    Ycood: Ycood,
+  },
+});
+
+export const setAllState = (state) => ({
+  type: types.SET_STATE_FROM_LOCAL_STORAGE,
+  payload: {
+    localState: state,
+  },
+});
+
+export const resetAllData = () => ({
+  type: types.RESET_ALL_DATA,
+});

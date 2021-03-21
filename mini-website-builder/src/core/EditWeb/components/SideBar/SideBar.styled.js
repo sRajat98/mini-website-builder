@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import styles from "../../../../app/styles/variables";
-// console.log(styles);
 
 export const Container = styled.div`
   display: flex;

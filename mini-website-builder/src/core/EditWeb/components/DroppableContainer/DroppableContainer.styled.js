@@ -7,3 +7,9 @@ export const Container = styled.div`
   min-height: 95vh;
   background-color: ${variabls.droppableContainerBackground};
 `;
+export const Image = styled.img`
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  height: 30px;
+`;

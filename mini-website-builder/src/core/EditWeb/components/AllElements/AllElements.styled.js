@@ -19,7 +19,6 @@ export const Label = styled.label`
   font-weight: ${(props) =>
     `${props.properties ? `${props.properties.properties.fontWeight}` : null}`};
   border: ${(props) => (props.isSelected ? "1px solid red" : "none")};
-  padding: 1rem;
 `;
 
 export const Input = styled.input`

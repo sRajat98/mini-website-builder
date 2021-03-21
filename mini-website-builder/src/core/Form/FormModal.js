@@ -7,7 +7,7 @@ import { getElementPropertiedById } from "../../app/redux/selectors/selectors";
 
 import closeIcon from "../../app/images/close.png";
 
-const FormModal = ({ id }) => {
+const FormModal = ({ id, initialX, initialY }) => {
   const dispatch = useDispatch();
   const elementProperties = useSelector(getElementPropertiedById);
   const [state, setState] = useState({
@@ -19,10 +19,12 @@ const FormModal = ({ id }) => {
   });
 
   useEffect(() => {
-    // eslint-disable-next-line no-unused-expressions
-    elementProperties ? setState({ ...elementProperties.properties }) : null;
-    dispatch(actionCreators.setSeledctedElementId(null));
-  }, [dispatch, elementProperties]);
+    elementProperties.id
+      ? setState({ ...elementProperties.properties })
+      : setState({ Xcood: initialX, Ycood: initialY });
+
+    // dispatch(actionCreators.setSeledctedElementId(null));
+  }, [dispatch, elementProperties, initialX]);
 
   const onChange = (value) => {
     setState({ ...state, ...value });
@@ -31,13 +33,13 @@ const FormModal = ({ id }) => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     dispatch(actionCreators.updateElementProperties(id, state));
-    dispatch(actionCreators.setFormModalVisiblity());
+    dispatch(actionCreators.setFormModalVisiblity(id));
     dispatch(actionCreators.setSeledctedElementId(null));
   };
 
   const formCloseHandler = () => {
     dispatch(actionCreators.updateElementProperties(id, null));
-    dispatch(actionCreators.setFormModalVisiblity());
+    dispatch(actionCreators.setFormModalVisiblity(id));
     dispatch(actionCreators.setSeledctedElementId(null));
   };
 
